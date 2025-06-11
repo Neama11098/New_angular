@@ -66,6 +66,9 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    // Clear any existing user data when component is created
+    this.authService.logout();
+    
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]

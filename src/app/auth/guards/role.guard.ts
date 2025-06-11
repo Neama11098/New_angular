@@ -15,16 +15,17 @@ export class RoleGuard implements CanActivate {
     const user = this.authService.getCurrentUser();
     const requiredRole = route.data['role'];
 
-    if (user && user.role === requiredRole) {
+    if (!user) {
+      this.router.navigate(['/auth/login']);
+      return false;
+    }
+
+    if (user.role === requiredRole) {
       return true;
     }
 
-    // Redirect to appropriate dashboard based on user role
-    if (user) {
-      this.router.navigate([`/${user.role}`]);
-    } else {
-      this.router.navigate(['/auth/login']);
-    }
+    // If user has a different role, redirect to their dashboard
+    this.router.navigate([`/${user.role}`]);
     return false;
   }
 } 
