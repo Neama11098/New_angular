@@ -38,12 +38,10 @@ export class AuthService {
     // Mock login - in real app, this would be an HTTP call
     const user = this.users.find(u => u.email === credentials.email);
     if (user) {
-      return of(user).pipe(
-        tap(user => {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-        })
-      );
+      // Store user in localStorage and update current user
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+      return of(user);
     }
     throw new Error('Invalid credentials');
   }

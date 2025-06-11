@@ -76,7 +76,12 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (user) => {
-          this.router.navigate([`/${user.role}`]);
+          // Navigate based on user role
+          if (user.role === 'student') {
+            this.router.navigate(['/student']);
+          } else if (user.role === 'admin') {
+            this.router.navigate(['/admin']);
+          }
         },
         error: (error) => {
           console.error('Login failed:', error);
