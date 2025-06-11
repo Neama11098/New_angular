@@ -14,9 +14,21 @@ import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           My Exam Results
         </h3>
+        <div class="mt-4 bg-indigo-50 p-4 rounded-md">
+          <h4 class="text-lg font-medium text-indigo-900">Total Score</h4>
+          <p class="text-2xl font-bold text-indigo-600">
+            {{ totalScore }} / {{ totalQuestions }}
+          </p>
+          <p class="text-sm text-indigo-500">
+            Overall Percentage: {{ (totalScore / totalQuestions) * 100 | number:'1.0-0' }}%
+          </p>
+        </div>
       </div>
 
       <div class="border-t border-gray-200">
+        <h4 class="px-4 py-3 text-lg font-medium text-gray-900 bg-gray-50">
+          Individual Exam Results
+        </h4>
         <ul class="divide-y divide-gray-200">
           <li *ngFor="let result of results" class="px-4 py-4 sm:px-6">
             <div class="flex items-center justify-between">
@@ -40,6 +52,8 @@ import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 })
 export class ExamResultsComponent implements OnInit {
   results: ExamResult[] = [];
+  totalScore: number = 0;
+  totalQuestions: number = 0;
 
   constructor(
     private examService: ExamService,
@@ -56,6 +70,9 @@ export class ExamResultsComponent implements OnInit {
       this.examService.getResultsByUser(user.id).subscribe({
         next: (results) => {
           this.results = results;
+          // Calculate total score and questions
+          this.totalScore = results.reduce((sum, result) => sum + result.score, 0);
+          this.totalQuestions = results.reduce((sum, result) => sum + result.totalQuestions, 0);
         },
         error: (error) => {
           console.error('Error loading results:', error);
