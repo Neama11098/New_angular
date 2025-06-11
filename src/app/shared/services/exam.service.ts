@@ -697,7 +697,9 @@ export class ExamService {
     return of(this.results.filter(result => result.userId === userId));
   }
 
+  
+
   getResultsByExam(examId: number): Observable<ExamResult[]> {
     return of(this.results.filter(result => result.examId === examId));
   }
-} 
+}
